@@ -1,28 +1,17 @@
--- Copyright (c) 2026 Snowflake Inc.
-
--- Licensed under the Apache License, Version 2.0 (the "License");
--- you may not use this file except in compliance with the License.
--- You may obtain a copy of the License at
-
--- http://www.apache.org/licenses/LICENSE-2.0
-
--- Unless required by applicable law or agreed to in writing, software
--- distributed under the License is distributed on an "AS IS" BASIS,
--- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
--- See the License for the specific language governing permissions and
--- limitations under the License.
-
-
+-- Snowflake Setup
 USE ROLE ACCOUNTADMIN;
-USE DATABASE SNOWFLAKE_LEARNING_DB;
 
-CREATE NETWORK RULE IF NOT EXISTS SNOWFLAKE_LEARNING_DB.PUBLIC.PYPI_NETWORK_RULE
+CREATE DATABASE IF NOT EXISTS EYADC;
+CREATE SCHEMA IF NOT EXISTS EYADC.INTEGRATIONS;
+
+USE DATABASE EYADC;
+USE SCHEMA INTEGRATIONS;
+CREATE NETWORK RULE IF NOT EXISTS PYPI_NETWORK_RULE
   MODE = EGRESS
   TYPE = HOST_PORT
   VALUE_LIST = ('pypi.org', 'pypi.python.org', 'pythonhosted.org', 'files.pythonhosted.org');
 
-
-CREATE NETWORK RULE IF NOT EXISTS SNOWFLAKE_LEARNING_DB.PUBLIC.PLANETARY_COMPUTER_NETWORK_RULE
+CREATE NETWORK RULE IF NOT EXISTS PLANETARY_COMPUTER_NETWORK_RULE
   MODE = EGRESS
   TYPE = HOST_PORT
   VALUE_LIST = (
@@ -56,8 +45,8 @@ CREATE NETWORK RULE IF NOT EXISTS SNOWFLAKE_LEARNING_DB.PUBLIC.PLANETARY_COMPUTE
 
 CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION DATA_CHALLENGE_EXTERNAL_ACCESS
   ALLOWED_NETWORK_RULES = (
-    SNOWFLAKE_LEARNING_DB.PUBLIC.PYPI_NETWORK_RULE,
-    SNOWFLAKE_LEARNING_DB.PUBLIC.PLANETARY_COMPUTER_NETWORK_RULE
+    EYADC.PUBLIC.PYPI_NETWORK_RULE,
+    EYADC.PUBLIC.PLANETARY_COMPUTER_NETWORK_RULE
   )
   ENABLED = TRUE;
 
@@ -65,23 +54,4 @@ CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION DATA_CHALLENGE_EXTERNAL_ACCESS
 -- Verify integration creation
 DESCRIBE INTEGRATION DATA_CHALLENGE_EXTERNAL_ACCESS;
 
-
--- Create Github Integration
-
-CREATE OR REPLACE API INTEGRATION GITHUB
-  API_PROVIDER = git_https_api
-  API_ALLOWED_PREFIXES = ('https://github.com')
-  API_USER_AUTHENTICATION = (TYPE = SNOWFLAKE_GITHUB_APP)
-  ENABLED = TRUE;
-
 ALTER ACCOUNT SET USE_WORKSPACES_FOR_SQL = 'always';
-
-
-select 'https://www.snowflake.com/en/developers/guides/ey-ai-and-data-challenge/#create-new-workspace-from-git-repo' 
-        as "Next Step: Click link below to return to Developer Guide, for instructions to create a Workspace from Git repo";
-/*
-
-Next Step: Click link below to return to Developer Guide, 
-           for instructions to create a Workspace from Git repo
-
-*/
