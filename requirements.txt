@@ -1,3 +1,4 @@
+numpy==1.26.4
 rioxarray==0.17.0
 pystac==1.11.0
 pystac_client==0.9.0
@@ -7,7 +8,7 @@ shapely==2.1.1
 rasterio==1.4.3
 tqdm==4.66.5
 pandas==2.3.0
-xarray==2025.3.1
+xarray==2024.7.0
 matplotlib==3.10.3
 geopandas==1.1.1
 seaborn==0.13.2
@@ -16,5 +17,4 @@ netCDF4==1.7.2
 adlfs==2025.8.0
 zarr==2.17.2
 dask==2024.10.0
-xarray[complete]
 numcodecs==0.12.1
